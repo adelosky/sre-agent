@@ -1,4 +1,4 @@
-// Reporting-worker VM (disk scenario). A small Ubuntu Standard_D2as_v6 VM (NVMe disk
+// Reporting-worker VM (disk scenario). A small Ubuntu Standard_D2as_v7 VM (NVMe disk
 // controller) that runs a "nightly grade
 // export" job (see src/reporting-worker/cloud-init.yaml). Exports are written to a separate
 // 8 GB DATA disk mounted at /data; chaos/break-disk.ps1 fills that disk so the export job
@@ -45,7 +45,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-09-01' = {
   location: location
   tags: tags
   properties: {
-    hardwareProfile: { vmSize: 'Standard_D2as_v6' }
+    hardwareProfile: { vmSize: 'Standard_D2as_v7' }
     osProfile: {
       computerName: 'zava-reporting'
       adminUsername: adminUsername
