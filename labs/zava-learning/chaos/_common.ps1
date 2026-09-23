@@ -212,6 +212,15 @@ function Get-KvSecret {
     [Parameter(Mandatory)][string]$ResourceGroup,
     [Parameter(Mandatory)][string]$Name
   )
+  # Governed-subscription fallback: tenant policy can force the Key Vault to
+  # private-endpoint-only, leaving it unreachable from an operator workstation
+  # outside the VNet. Allow an env-var override so post-provision and the chaos
+  # scripts still run. Env var name: ZAVA_SECRET_<NAME> with dashes as underscores,
+  # e.g. db-password -> ZAVA_SECRET_DB_PASSWORD.
+  $envKey = "ZAVA_SECRET_" + ($Name -replace '-', '_').ToUpper()
+  $override = [Environment]::GetEnvironmentVariable($envKey)
+  if ($override) { return $override }
+
   $kv = Get-KeyVaultName -ResourceGroup $ResourceGroup
   $value = az keyvault secret show --vault-name $kv -n $Name --query value -o tsv
   if (-not $value) { throw "Could not read Key Vault secret '$Name' from $kv." }
