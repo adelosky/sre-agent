@@ -18,6 +18,8 @@ param acaSubnetPrefix string = '10.20.2.0/23'
 param nsgLaneSubnetPrefix string = '10.20.4.0/23'
 @description('Reporting-worker VM subnet prefix. Hosts the nightly grade-export worker VM (disk scenario).')
 param vmSubnetPrefix string = '10.20.6.0/24'
+@description('Private endpoint subnet prefix.')
+param peSubnetPrefix string = '10.20.8.0/24'
 
 @description('''Demo fault toggle. When true, ships a high-priority (100) "legacy
 segmentation" DENY rule on the Container Apps NSG that beats the ALLOW at 200 and
@@ -334,6 +336,12 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
           networkSecurityGroup: { id: vmNsg.id }
         }
       }
+      {
+        name: 'pe-subnet'
+        properties: {
+          addressPrefix: peSubnetPrefix
+        }
+      }
     ]
   }
 }
@@ -347,3 +355,4 @@ output vmSubnetId string = vnet.properties.subnets[3].id
 output acaNsgName string = acaNsg.name
 output nsgLaneNsgName string = nsgLaneNsg.name
 output appGwSubnetPrefix string = appGwSubnetPrefix
+output peSubnetId string = vnet.properties.subnets[4].id

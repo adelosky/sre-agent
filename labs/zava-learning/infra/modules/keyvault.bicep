@@ -78,3 +78,5 @@ output vaultUri string = vault.properties.vaultUri
 output secretUriDbPassword string = '${vault.properties.vaultUri}secrets/db-password'
 output secretUriSecretLane string = '${vault.properties.vaultUri}secrets/db-password-secretlane'
 output secretUriPoolPassword string = '${vault.properties.vaultUri}secrets/db-pool-password'
+@description('Resource id of the Key Vault (used by the private endpoint).')
+output vaultId string = vault.id

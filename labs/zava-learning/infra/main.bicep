@@ -132,6 +132,19 @@ module network 'modules/network.bicep' = {
   }
 }
 
+module privateEndpoint 'modules/private-endpoint.bicep' = {
+  name: 'private-endpoint'
+  scope: rg
+  params: {
+    location: location
+    resourceToken: resourceToken
+    tags: tags
+    subnetId: network.outputs.peSubnetId
+    keyVaultId: keyvault.outputs.vaultId
+    vnetId: network.outputs.vnetId
+  }
+}
+
 module aca 'modules/aca.bicep' = {
   name: 'aca'
   scope: rg
@@ -164,6 +177,7 @@ module aca 'modules/aca.bicep' = {
     secretUriSecretLane: keyvault.outputs.secretUriSecretLane
     secretUriPoolPassword: keyvault.outputs.secretUriPoolPassword
   }
+    dependsOn: [ privateEndpoint ]
 }
 
 module dns 'modules/dns.bicep' = {
